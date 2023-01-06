@@ -1,6 +1,7 @@
 import CartePersonage from '../component/CartePerso';
 import NavBar from '../component/NavBar'
-import Stack from 'react-bootstrap/Stack';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
 export default function App(){
     var min=1; 
@@ -9,17 +10,24 @@ export default function App(){
     return(
         <div>
             <NavBar/>
-            <div className="bg-light border text-center">5 personnage aleatiore : </div>
-            
-            <Stack direction="horizontal" gap={3}>
-                <CartePersonage id={Math.floor(Math.random() * (max - min)) + min}/>
-                <CartePersonage id={Math.floor(Math.random() * (max - min)) + min}/>
-                <CartePersonage id={Math.floor(Math.random() * (max - min)) + min}/>
-                <CartePersonage id={Math.floor(Math.random() * (max - min)) + min}/>
-                <CartePersonage id={Math.floor(Math.random() * (max - min)) + min}/>
-            </Stack>
-            <div className="bg-light border text-center">Les 5 favoris</div>
-        </div>
-            
+            <div className="bg-light border text-center">5 personnages aleatiores : </div>          
+            <Row xs={1} md={5}>
+                <Col>
+                    <CartePersonage id={Math.floor(Math.random() * (max - min)) + min}/>
+                </Col>
+                <Col>
+                    <CartePersonage id={Math.floor(Math.random() * (max - min)) + min}/>
+                </Col>
+                <Col>
+                    <CartePersonage id={Math.floor(Math.random() * (max - min)) + min}/>
+                </Col>
+                <Col>
+                    <CartePersonage id={Math.floor(Math.random() * (max - min)) + min}/>
+                </Col>
+                <Col>
+                    <CartePersonage id={Math.floor(Math.random() * (max - min)) + min}/>
+                </Col>
+            </Row>
+        </div>         
     )
 }

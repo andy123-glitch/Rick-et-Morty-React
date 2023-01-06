@@ -2,7 +2,6 @@ import NavBar from '../component/NavBar'
 import Table from 'react-bootstrap/Table'
 import { useEffect, useState } from 'react'
 import React from 'react';
-import Button from 'react-bootstrap/esm/Button';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 
@@ -33,7 +32,6 @@ export default function App() {
                         <th>Liste des personnages</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     {results.map((result) => (
                         <tr>
@@ -46,7 +44,6 @@ export default function App() {
                 </tbody>
 
             </Table>
-            
             <ToggleButtonGroup type="radio" name="Page" defaultValue={1}>
                 <ToggleButton id="tbg-radio-1" value={1} onChange={(e)=>setpageNumber(1)}>
                    1 
@@ -58,5 +55,6 @@ export default function App() {
                     3
                 </ToggleButton>
             </ToggleButtonGroup>
-        </div>)
+        </div>
+    )
 }

@@ -5,9 +5,7 @@ import { useEffect, useState } from 'react'
 export default function App(props) {
     let [fetchedData, updateFetchedData] = useState([]);
 
-
     let api = props.url;
-
     
     useEffect(() => {
         (async function () {
@@ -17,13 +15,10 @@ export default function App(props) {
     }, [api]);
 
     return (
-       
             <tr>
                 <td>{fetchedData.name}</td>
                 <td>{fetchedData.episode}</td>
                 <td>{fetchedData.air_date}</td>
             </tr>
-      
     )
-
 }

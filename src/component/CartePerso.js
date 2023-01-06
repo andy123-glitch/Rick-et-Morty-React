@@ -1,6 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { useEffect, useState } from 'react';
+import BoutonFav from './BoutonFav'
 
 export default function CartePersonage(props) {
 
@@ -18,11 +19,11 @@ export default function CartePersonage(props) {
 console.log(fetchedData);
 
   return (
-    <Card style={{ width: '18rem' }}>
+    <Card >
       <Card.Img variant="top" src={fetchedData.image} />
       <Card.Body>
         <Card.Link href={'/Personnage?'+props.id}>{fetchedData.name}</Card.Link>
-        <div className="vr"/><Button variant="light">❤️</Button>
+        <BoutonFav/>
       </Card.Body>
     </Card>
   );
