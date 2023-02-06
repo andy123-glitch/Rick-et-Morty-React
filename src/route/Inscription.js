@@ -1,63 +1,73 @@
-// import { useState } from "react";
-// import { Card, FloatingLabel, Form, Button } from "react-bootstrap";
-
-
-// export default async function App() {
-//     const [email, SetEmail] = useState();
-//     const [password, SetPassword] = useState();
-    
-//     return (
-//         <div>
-//             <Card className="mx-auto my-5 p-3 w-50 h-25">
-//                 <Card.Title>Inscription</Card.Title>
-//                 <Card.Body>
-//                     <Form.Label htmlFor="inputPassword5">Email</Form.Label>
-//                     <Form.Control
-//                         type="email"
-//                         id="inputemail5"
-//                         onChange={(e) => (SetEmail(e.target.value))}
-//                         value={email}
-//                     />
-//                     <Form.Label htmlFor="inputPassword5">Password</Form.Label>
-//                     <Form.Control
-//                         type="password"
-//                         id="inputPassword5"
-//                         aria-describedby="passwordHelpBlock"
-//                         onChange={(e) => (SetPassword(e.target.value))}
-//                         value={password}
-//                     />
-//                     <Button variant="primary"onClick={console.log()}>S'inscrire</Button>
-//                 </Card.Body>
-//             </Card>
-//         </div>
-//     );
-// }
-
-// function verifEmail(email) {
-//     if (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) return true;
-//     return false;
-// }
-
 import React from "react";
+import { useContext, useRef, useState } from "react";
 import { connect } from "react-redux";
-import Button from "react-bootstrap/esm/Button";
+import store from './../redux/store';
+import { changeUser } from "../redux/action/user";
+import { addFavorite, delFavorite } from '../redux/action/Favorites';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import app from "../redux/reducer/user";
+
+import {
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    onAuthStateChanged
+} from 'firebase/auth';
+import { auth } from '../firebase-config';
+
+export default function App() {
+    const inputs = useRef([])
+    const formRef = useRef()
+    const addInputs = el => {
+        if (el && !inputs.current.includes(el)) {
+            inputs.current.push(el)
+            
+        }
+    }
+
+    const [currentUser, setCurrentUser] = useState();
+    const [loadingData, setLoadingData] = useState(true);
+
+    const signIn = (email, pwd) => createUserWithEmailAndPassword(auth, email, pwd)
+
+    
 
 
-class Profil extends React.Component {
-	render(){
-		return (
-			<div>        <Button variant="light" className='float-end' >❤️</Button>
+    const handleForm = async (e) => {
+        
+        try {
+            const cred = await signIn(
+              inputs.current[0].value,
+              inputs.current[1].value
+            );
+            // à tester
+            formRef.current.reset();
+            console.log(cred);
+          } catch {
+          }
+        };
+    
 
-        {this.props.user === null ? 'Not logged' : this.props.user.username}
-      </div>
-		)
-	}
+    return (
+        <Form>
+            <Form.Group ref={formRef} onSubmit={handleForm} className="mb-3" controlId="formBasicEmail">
+                <Form.Label>Email address</Form.Label>
+                <input ref={addInputs} type="email" placeholder="Enter email" name="email" />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Label >Password</Form.Label>
+                <input ref={addInputs} type="password" placeholder="Password" />
+            </Form.Group>
+            <p className="text-danger mt-1"></p>
+            <Button variant="primary" type="submit">
+                S'incrire
+            </Button>
+            <Button href="/" className="m-2" variant="primary" type="submit">
+                Retour
+            </Button>
+            
+        </Form>
+    )
 }
 
-const mapStateToProps = state => {
-  const { user } = state;
-  console.log(state);
-  return { user };
-};
 
-export default connect(mapStateToProps)(Profil);

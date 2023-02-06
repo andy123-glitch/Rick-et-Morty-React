@@ -16,7 +16,7 @@ export default function App() {
             <div>
                 <NavBar />
                 <div className="bg-light border text-center">5 personnages aleatiores : </div>
-                <Row xs={1} md={5}>
+                <Row >
                     <Col>
                         <CartePersonage id={Math.floor(Math.random() * (max - min)) + min} />
                     </Col>

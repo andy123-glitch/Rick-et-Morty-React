@@ -1,4 +1,3 @@
-import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { useEffect, useState } from 'react';
 import BoutonFav from './BoutonFav'
@@ -16,14 +15,14 @@ export default function CartePersonage(props) {
       })();
   }, [api]);
 
-console.log(fetchedData);
+//console.log(fetchedData);
 
   return (
     <Card >
       <Card.Img variant="top" src={fetchedData.image} />
       <Card.Body>
         <Card.Link href={'/Personnage?'+props.id}>{fetchedData.name}</Card.Link>
-        <BoutonFav/>
+        <BoutonFav id={props.id}/>
       </Card.Body>
     </Card>
   );
