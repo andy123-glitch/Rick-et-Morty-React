@@ -7,10 +7,6 @@ import React from 'react'
 import CartePersonage from './../component/CartePerso';
 
 class Favorites extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <>
@@ -18,7 +14,7 @@ class Favorites extends React.Component {
                 <Container>
                     <Row>
                         {this.props.favorites.map((id) => (
-                            <Col>
+                            <Col key={id}>
                                 <CartePersonage id={id} />
                             </Col>
                         ))}
@@ -41,4 +37,3 @@ const mapStateToProps = state => {
 export default connect(
     mapStateToProps,
 )(Favorites);
-

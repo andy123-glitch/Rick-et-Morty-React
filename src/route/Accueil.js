@@ -2,39 +2,26 @@ import CartePersonage from '../component/CartePerso';
 import NavBar from '../component/NavBar'
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { Provider } from 'react-redux';
-import store from '../component/store/index'
-import { useEffect, useState } from 'react'
-import Test from '../component/test';
+import { useMemo } from 'react';
 
 
 export default function App() {
-    var min = 1;
-    var max = 826;
+    const characterIds = useMemo(
+        () => Array.from({ length: 5 }, () => Math.floor(Math.random() * 826) + 1),
+        []
+    );
 
     return (
-            <div>
-                <NavBar />
-                <div className="bg-light border text-center">5 personnages aleatiores : </div>
-                <Row >
-                    <Col>
-                        <CartePersonage id={Math.floor(Math.random() * (max - min)) + min} />
+        <div>
+            <NavBar />
+            <div className="bg-light border text-center">5 personnages aléatoires :</div>
+            <Row>
+                {characterIds.map((id, index) => (
+                    <Col key={`${id}-${index}`}>
+                        <CartePersonage id={id} />
                     </Col>
-                    <Col>
-                        <CartePersonage id={Math.floor(Math.random() * (max - min)) + min} />
-                    </Col>
-                    <Col>
-                        <CartePersonage id={Math.floor(Math.random() * (max - min)) + min} />
-                    </Col>
-                    <Col>
-                        <CartePersonage id={Math.floor(Math.random() * (max - min)) + min} />
-                    </Col>
-                    <Col>
-                        <CartePersonage id={Math.floor(Math.random() * (max - min)) + min} />
-                    </Col>
-                </Row>
-            </div> 
-        
-    )
+                ))}
+            </Row>
+        </div>
+    );
 }
-

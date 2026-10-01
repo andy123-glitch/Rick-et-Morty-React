@@ -1,73 +1,73 @@
-import React from "react";
-import { useContext, useRef, useState } from "react";
-import { connect } from "react-redux";
-import store from './../redux/store';
-import { changeUser } from "../redux/action/user";
-import { addFavorite, delFavorite } from '../redux/action/Favorites';
-import Form from 'react-bootstrap/Form';
+import { useState } from 'react';
+import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
-import app from "../redux/reducer/user";
+import Form from 'react-bootstrap/Form';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, isFirebaseConfigured } from '../firebase-config';
 
-import {
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    onAuthStateChanged
-} from 'firebase/auth';
-import { auth } from '../firebase-config';
+export default function Inscription() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [message, setMessage] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-export default function App() {
-    const inputs = useRef([])
-    const formRef = useRef()
-    const addInputs = el => {
-        if (el && !inputs.current.includes(el)) {
-            inputs.current.push(el)
-            
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setMessage('');
+
+        if (!auth) {
+            setMessage("L'inscription est indisponible sans configuration Firebase.");
+            return;
         }
-    }
 
-    const [currentUser, setCurrentUser] = useState();
-    const [loadingData, setLoadingData] = useState(true);
-
-    const signIn = (email, pwd) => createUserWithEmailAndPassword(auth, email, pwd)
-
-    
-
-
-    const handleForm = async (e) => {
-        
+        setIsSubmitting(true);
         try {
-            const cred = await signIn(
-              inputs.current[0].value,
-              inputs.current[1].value
-            );
-            // à tester
-            formRef.current.reset();
-            console.log(cred);
-          } catch {
-          }
-        };
-    
+            await createUserWithEmailAndPassword(auth, email, password);
+            setMessage('Compte créé avec succès.');
+            setEmail('');
+            setPassword('');
+        } catch (error) {
+            setMessage(`Échec de l'inscription : ${error.message}`);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     return (
-        <Form>
-            <Form.Group ref={formRef} onSubmit={handleForm} className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
-                <input ref={addInputs} type="email" placeholder="Enter email" name="email" />
+        <Form onSubmit={handleSubmit} className="p-3">
+            {!isFirebaseConfigured && (
+                <Alert variant="warning">
+                    La configuration Firebase est absente. La navigation reste disponible,
+                    mais l'inscription est désactivée.
+                </Alert>
+            )}
+            <Form.Group className="mb-3" controlId="registrationEmail">
+                <Form.Label>Adresse e-mail</Form.Label>
+                <Form.Control
+                    type="email"
+                    placeholder="Adresse e-mail"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    required
+                />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label >Password</Form.Label>
-                <input ref={addInputs} type="password" placeholder="Password" />
+            <Form.Group className="mb-3" controlId="registrationPassword">
+                <Form.Label>Mot de passe</Form.Label>
+                <Form.Control
+                    type="password"
+                    placeholder="Mot de passe"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    required
+                />
             </Form.Group>
-            <p className="text-danger mt-1"></p>
-            <Button variant="primary" type="submit">
-                S'incrire
+            {message && <p aria-live="polite">{message}</p>}
+            <Button variant="primary" type="submit" disabled={!auth || isSubmitting}>
+                {isSubmitting ? 'Création…' : "S'inscrire"}
             </Button>
-            <Button href="/" className="m-2" variant="primary" type="submit">
+            <Button href="/" className="m-2" variant="secondary">
                 Retour
             </Button>
-            
         </Form>
-    )
+    );
 }
-
-

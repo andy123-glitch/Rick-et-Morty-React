@@ -5,17 +5,38 @@ import BoutonFav from './BoutonFav'
 export default function CartePersonage(props) {
 
   let [fetchedData, updateFetchedData] = useState([]);
+  let [error, setError] = useState('');
   
   let api = `https://rickandmortyapi.com/api/character/${props.id}`;
   
   useEffect(() => {
-  (async function () {
-          let data = await fetch(api).then((res) => res.json());
+    let isActive = true;
+
+    (async function () {
+      try {
+        const response = await fetch(api);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const data = await response.json();
+        if (isActive) {
           updateFetchedData(data);
-      })();
+        }
+      } catch (requestError) {
+        if (isActive) {
+          setError(`Personnage indisponible (${requestError.message})`);
+        }
+      }
+    })();
+
+    return () => {
+      isActive = false;
+    };
   }, [api]);
 
-//console.log(fetchedData);
+  if (error) {
+    return <Card body>{error}</Card>;
+  }
 
   return (
     <Card >

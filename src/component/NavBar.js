@@ -8,13 +8,12 @@ export default function App(){
         <Container>
           <Navbar.Brand > Rick Et Morty</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="/">Acceuil</Nav.Link>
-            <Nav.Link href="Episode">Episode</Nav.Link>
-            <Nav.Link href="Favoris">Favoris</Nav.Link>
-            <Nav.Link href="Connexion">Connexion</Nav.Link>
-            <Nav.Link href="Inscription">Inscription</Nav.Link>
+            <Nav.Link href="/">Accueil</Nav.Link>
+            <Nav.Link href="/Episode">Épisodes</Nav.Link>
+            <Nav.Link href="/Favoris">Favoris</Nav.Link>
+            <Nav.Link href="/Connexion">Connexion</Nav.Link>
+            <Nav.Link href="/Inscription">Inscription</Nav.Link>
           </Nav>
         </Container>
       </Navbar>)
 }
-

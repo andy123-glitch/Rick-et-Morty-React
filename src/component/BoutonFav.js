@@ -1,31 +1,28 @@
-import React from "react";
 import { connect } from "react-redux";
-import Button from "react-bootstrap/esm/Button";
-import store from './../redux/store';
+import Button from "react-bootstrap/Button";
 import {addFavorite,delFavorite} from '../redux/action/Favorites';
 
-class App extends React.Component {
-    constructor(props){
-        super(props); 
-    }
-    
-    toggle=true;
-    handle = () => {
-        if (this.toggle) {
-            this.props.addFavorite(this.props.id)  
-        }else this.props.delFavorite(this.props.id)
-        this.toggle=!this.toggle
-        console.log(this.props.state)
+function FavoriteButton({ id, favorites, addFavorite, delFavorite }) {
+    const isFavorite = favorites.includes(id);
+
+    const handleClick = () => {
+        if (isFavorite) {
+            delFavorite(id);
+        } else {
+            addFavorite(id);
+        }
     };
 
-    render() {
-        return (
-            <div>
-                <Button variant="light" className='float-end'
-                    onClick={this.handle} > {this.toggle?'♡':'❤️'}</Button>
-            </div>
-        )
-    }
+    return (
+        <Button
+            variant="light"
+            className="float-end"
+            onClick={handleClick}
+            aria-label={isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+        >
+            {isFavorite ? '❤️' : '♡'}
+        </Button>
+    );
 }
 
 const mapStateToProps = state => {
@@ -33,5 +30,5 @@ const mapStateToProps = state => {
     return { favorites };
 };
 
-export default connect(mapStateToProps,    
-    {addFavorite,delFavorite})(App);
+export default connect(mapStateToProps,
+    {addFavorite,delFavorite})(FavoriteButton);

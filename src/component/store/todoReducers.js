@@ -16,7 +16,6 @@ export function todoReducer(state = initialeState,action) {
             return [...state,{id:++id,completed:false,...action.payload}]
             default:
                 return state;
-            break;
     }
     
 }

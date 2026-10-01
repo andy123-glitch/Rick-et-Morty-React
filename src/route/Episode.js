@@ -8,21 +8,41 @@ import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 export default function App() {
     let [pageNumber, setpageNumber] = useState(1);
     let [fetchedData, updateFetchedData] = useState([]);
+    let [error, setError] = useState('');
     let {results = [] } = fetchedData;
 
-    console.log(results);
     let api = `https://rickandmortyapi.com/api/episode?page=${pageNumber}`;
 
     useEffect(() => {
+        let isActive = true;
+
         (async function () {
-            let data = await fetch(api).then((res) => res.json());
-            updateFetchedData(data);
+            try {
+                const response = await fetch(api);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                const data = await response.json();
+                if (isActive) {
+                    updateFetchedData(data);
+                    setError('');
+                }
+            } catch (requestError) {
+                if (isActive) {
+                    setError(`Impossible de charger les épisodes (${requestError.message}).`);
+                }
+            }
         })();
+
+        return () => {
+            isActive = false;
+        };
     }, [api]);
 
     return (
         <div>
             <NavBar />
+            {error && <p className="alert alert-danger">{error}</p>}
             <Table striped bordered hover>
                 <thead>
                     <tr>
@@ -34,7 +54,7 @@ export default function App() {
                 </thead>
                 <tbody>
                     {results.map((result) => (
-                        <tr>
+                        <tr key={result.id}>
                             <td>{result.name}</td>
                             <td>{result.episode}</td>
                             <td>{result.air_date}</td>
